@@ -3,11 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration from '../../../../../config/configuration';
 import validationSchema from '../../../../../config/validationSchema';
-import { OrderStateFactory } from '../../factories/order-state.factory';
-import { OrderStateService } from './order-state.service';
+import { OrderItemService } from './order-item.service';
 
-describe('OrderStateService', () => {
-  let service: OrderStateService;
+describe('OrderItemService', () => {
+  let service: OrderItemService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
@@ -26,12 +25,10 @@ describe('OrderStateService', () => {
           inject: [ConfigService],
         }),
       ],
-      providers: [OrderStateFactory, OrderStateService],
+      providers: [OrderItemService],
     }).compile();
-
-    service = module.get<OrderStateService>(OrderStateService);
+    service = module.get<OrderItemService>(OrderItemService);
   });
-
   it('should be defined', () => {
     expect(service).toBeDefined();
   });

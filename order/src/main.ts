@@ -16,7 +16,7 @@ async function bootstrap() {
 
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT, () => console.log('Order service active at:', process.env.PORT));
 
   if (module.hot) {
     module.hot.accept();
