@@ -1,0 +1,6 @@
+export enum ORDER_STATUS {
+  CREATED = 1,
+  CONFIRMED = 2,
+  DELIVERED = 3,
+  CANCELLED = 0,
+}
