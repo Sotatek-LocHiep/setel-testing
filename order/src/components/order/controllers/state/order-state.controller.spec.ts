@@ -1,12 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { TestModule } from '../../../../../test/test.module';
+import { ProductService } from '../../../../components/product/services/product.service';
+import { ServicesModule } from '../../../../shared/services/services.module';
+import { OrderModule } from '../../order.module';
 import { OrderStateController } from './order-state.controller';
 
-describe('Order State Controller', () => {
+describe('OrderStateController', () => {
   let controller: OrderStateController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OrderStateController],
+      imports: [OrderModule, ServicesModule, TestModule],
+      providers: [ProductService],
     }).compile();
 
     controller = module.get<OrderStateController>(OrderStateController);

@@ -1,10 +1,12 @@
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from '../../user/services/user.service';
-import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
-import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { TestModule } from '../../../../test/test.module';
+import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
+import { HashService } from '../../../shared/services/hash/hash.service';
+import { UserService } from '../../user/services/user.service';
 import { JwtStrategy } from '../strategies/jwt.strategy';
+import { AuthController } from './auth.controller';
 
 describe('Auth Controller', () => {
   let controller: AuthController;
@@ -12,7 +14,7 @@ describe('Auth Controller', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule,
+        TestModule,
         JwtModule.registerAsync({
           imports: [ConfigModule],
           useFactory: async (configService: ConfigService) => ({
@@ -25,7 +27,7 @@ describe('Auth Controller', () => {
         }),
       ],
       controllers: [AuthController],
-      providers: [ApiResponseService, JwtStrategy, JwtService, UserService],
+      providers: [ApiResponseService, HashService, JwtStrategy, UserService],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);

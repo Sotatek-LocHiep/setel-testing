@@ -1,22 +1,17 @@
-import { Controller, Get, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RequestAuthenticated } from '../../auth/interfaces/request-authenticated-interface';
 import { UserService } from '../services/user.service';
 import { UserTransformer } from '../transformers/user.transformer';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { HashService } from '../../../shared/services/hash/hash.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { RequestAuthenticated } from '../../auth/interfaces/request-authenticated-interface';
 
 @ApiTags('Profile')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('api/v1/profile')
 export class ProfileController {
-  constructor(
-    private response: ApiResponseService,
-    private userService: UserService,
-    private hashService: HashService,
-  ) {}
+  constructor(private response: ApiResponseService, private userService: UserService) {}
 
   @Get()
   async profile(@Req() request: RequestAuthenticated): Promise<any> {

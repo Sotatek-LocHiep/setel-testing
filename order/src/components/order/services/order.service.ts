@@ -95,7 +95,7 @@ export class OrderService extends BaseService {
     return state;
   }
 
-  async checkOwnership(order_id: number, user_id: number) {
+  async checkOwnership(order_id: number, user_id: number): Promise<boolean> {
     const order = await this.first({ where: { id: order_id, user_id } });
     return order ? true : false;
   }

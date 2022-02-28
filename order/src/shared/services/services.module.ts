@@ -5,7 +5,7 @@ import { microServicesProvide } from './micro-service/micro-services.provider';
 @Global()
 @Module({
   providers: [ApiResponseService, HashService, ...microServicesProvide],
-  exports: [ApiResponseService, ...microServicesProvide],
+  exports: [ApiResponseService, HashService, ...microServicesProvide],
   imports: [],
 })
 export class ServicesModule {}
