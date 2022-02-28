@@ -18,7 +18,7 @@ export default (): any => ({
 
   // Run migrations automatically,
   // you can disable this if you prefer running migration manually.
-  migrationsRun: true,
+  migrationsRun: false,
   logging: process.env.DB_LOGGING === 'true',
   logger: 'file',
 

@@ -6,7 +6,7 @@ import { OrderStateFactory } from './order-state.factory';
 describe('OrderStateFactory', () => {
   let service: OrderStateFactory;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [OrderStateFactory],
     }).compile();
@@ -21,23 +21,24 @@ describe('OrderStateFactory', () => {
   // service payment must active to execute this test case
   it('should be return instance of OrderState with CREATED status', () => {
     const data = service.buildEntityCreatedState(1);
-    expect(data instanceof OrderState).toBeTruthy();
+    expect(data).toBeInstanceOf(OrderState);
+
     expect(data.status).toBe(ORDER_STATUS.CREATED);
   });
   it('should be return instance of OrderState with CONFIRMED status', () => {
     const data = service.buildEntityConfirmedState(1);
-    expect(data instanceof OrderState).toBeTruthy();
+    expect(data).toBeInstanceOf(OrderState);
     expect(data.status).toBe(ORDER_STATUS.CONFIRMED);
   });
   it('should be return instance of OrderState with DELIVERED status', () => {
     const data = service.buildEntityDeliveredState(1);
-    expect(data instanceof OrderState).toBeTruthy();
+    expect(data).toBeInstanceOf(OrderState);
     expect(data.status).toBe(ORDER_STATUS.DELIVERED);
   });
   it('should be return instance of OrderState with CANCELLED status', () => {
     const reject_reason = 'Test reject reason.';
     const data = service.buildEntityCanceledState(1, reject_reason);
-    expect(data instanceof OrderState).toBeTruthy();
+    expect(data).toBeInstanceOf(OrderState);
     expect(data.status).toBe(ORDER_STATUS.CANCELLED);
     expect(data.reject_reason).toBe(reject_reason);
   });

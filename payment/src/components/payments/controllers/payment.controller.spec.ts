@@ -1,18 +1,36 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrderController } from './payment.controller';
+import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
+import { PaymentService } from '../services/payment.service';
+import { PaymentController } from './payment.controller';
 
 describe('Order Controller', () => {
-  let controller: OrderController;
+  let controller: PaymentController;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OrderController],
+      controllers: [PaymentController],
+      providers: [PaymentService, ApiResponseService],
     }).compile();
 
-    controller = module.get<OrderController>(OrderController);
+    controller = module.get<PaymentController>(PaymentController);
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('should be return payment result', async () => {
+    const { data } = await controller.payment(1);
+    expect(data).toHaveProperty('success');
+    expect(typeof data.success).toBe('boolean');
+    if (!data.success) {
+      expect(data).toHaveProperty('message');
+    }
+  });
+
+  it('should be return refund result', async () => {
+    const { data } = await controller.refund(1);
+    expect(data).toHaveProperty('success');
+    expect(typeof data.success).toBe('boolean');
   });
 });

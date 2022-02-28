@@ -4,7 +4,7 @@ import { HashService } from './hash.service';
 describe('HashService', () => {
   let service: HashService;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [HashService],
     }).compile();

@@ -4,7 +4,7 @@ import { OrderItemService } from './order-item.service';
 
 describe('OrderItemService', () => {
   let service: OrderItemService;
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TestModule],
       providers: [OrderItemService],

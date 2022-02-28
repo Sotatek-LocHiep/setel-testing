@@ -7,7 +7,7 @@ import { ProductController } from './product.controller';
 describe('Product Controller', () => {
   let controller: ProductController;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TestModule],
       providers: [ApiResponseService, ProductService],

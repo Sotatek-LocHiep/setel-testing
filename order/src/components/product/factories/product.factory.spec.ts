@@ -10,6 +10,6 @@ describe('ProductFactory', () => {
       sale_price: 237000,
       amount: 10,
     });
-    expect(data instanceof Product).toBeTruthy();
+    expect(data).toBeInstanceOf(Product);
   });
 });

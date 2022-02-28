@@ -8,7 +8,7 @@ import { OrderController } from './order.controller';
 describe('OrderController', () => {
   let controller: OrderController;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TestModule, OrderModule, ServicesModule],
       providers: [ProductService],

@@ -19,7 +19,9 @@ import { SharedModule } from '../src/shared/shared.module';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (config: ConfigService) => config.get('database'),
+      useFactory: (config: ConfigService) => {
+        return config.get('database');
+      },
       inject: [ConfigService],
     }),
   ],

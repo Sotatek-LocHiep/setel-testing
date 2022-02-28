@@ -25,7 +25,7 @@ services:
     ports:
       - ${PAYMENT_SERVICE_PORT}:${PAYMENT_SERVICE_PORT}
     build:
-      context: payment-service
+      context: payment
       dockerfile: ./Dockerfile
       args:
         PAYMENT_SERVICE_PORT: ${PAYMENT_SERVICE_PORT}
@@ -40,7 +40,7 @@ services:
     ports:
       - ${PORT}:${PORT}
     build:
-      context: order-service
+      context: order
       dockerfile: ./Dockerfile
     depends_on:
       - order-database

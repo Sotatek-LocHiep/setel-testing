@@ -5,7 +5,7 @@ import { PaymentMicroServiceMethod } from './payment-micro-service.method';
 describe('PaymentMicroServiceMethod', () => {
   let service: PaymentMicroServiceMethod;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
