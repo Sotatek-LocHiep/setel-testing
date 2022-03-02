@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ForbiddenException } from '@nestjs/common';
 import { Not } from 'typeorm';
 import { TestModule } from '../../../../test/test.module';
 import { ServicesModule } from '../../../shared/services/services.module';
@@ -60,12 +61,10 @@ describe('OrderService', () => {
   });
   it('should be return truthy ownership status order', async () => {
     const order = await service.first({ where: { id: Not(0) } });
-    const check = await service.checkOwnership(order.id, order.user_id);
-    expect(check).toBeTruthy();
+    expect(await service.checkOwnership(order.id, order.user_id)).not.toThrow(ForbiddenException);
   });
   it('should be return falsy ownership status order', async () => {
     const order = await service.first({ where: { id: Not(0) } });
-    const check = await service.checkOwnership(order.id, order.user_id + 1);
-    expect(check).toBeFalsy();
+    expect(await service.checkOwnership(order.id, order.user_id + 1)).toThrow(ForbiddenException);
   });
 });

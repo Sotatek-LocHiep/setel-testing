@@ -122,21 +122,12 @@ export default function MyOrder() {
       if (order) {
         order.order_states.push(state)
         setOrders([...orders])
-        if (state.status === ORDER_STATUS.CANCELLED) {
-          return toast({
-            ...toastDefaultOption,
-            title: 'Confirm order error.',
-            description: `Your order ${orderCode} canceled because: ${state.reject_reason}`,
-            status: 'error',
-          })
-        } else {
-          return toast({
-            ...toastDefaultOption,
-            title: 'Confirm order success.',
-            description: `Your order ${orderCode} confirmed success and has been transferred to the delivery state`,
-            status: 'success',
-          })
-        }
+        return toast({
+          ...toastDefaultOption,
+          title: 'Confirm order success.',
+          description: `Your order ${orderCode} confirmed success.`,
+          status: 'success',
+        })
       }
     }
   }
@@ -154,7 +145,7 @@ export default function MyOrder() {
         return toast({
           ...toastDefaultOption,
           title: 'Cancel order success.',
-          description: `Your order ${orderCode} is canceled success`,
+          description: `Your order ${orderCode} is canceled success.`,
           status: 'success',
         })
       }

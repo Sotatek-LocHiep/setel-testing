@@ -24,15 +24,20 @@ function TimelineItem({ state }: { state: OrderStateInterface }) {
     }
   }, [state.status])
   return (
-    <Grid templateColumns="repeat(7, 1fr)" gap={6} padding={2}>
-      <GridItem colSpan={2}>{buildStringStateOrder(state.status)}</GridItem>
-      <GridItem colSpan={1}>
-        <CFaRegCircle margin={1.5} boxSize={3} color={circleColor} />
-      </GridItem>
-      <GridItem colSpan={4}>
-        <Text>{formatDateToCleanString(state.created_at)}</Text>
-      </GridItem>
-    </Grid>
+    <Box>
+      <Grid templateColumns="repeat(7, 1fr)" gap={6} padding={2}>
+        <GridItem colSpan={2}>{buildStringStateOrder(state.status)}</GridItem>
+        <GridItem colSpan={1}>
+          <CFaRegCircle margin={1.5} boxSize={3} color={circleColor} />
+        </GridItem>
+        <GridItem colSpan={4}>
+          <Text>{formatDateToCleanString(state.created_at)}</Text>
+        </GridItem>
+      </Grid>
+      {state.reject_reason && (
+        <Text marginLeft={2}>Reason: {state.reject_reason}</Text>
+      )}
+    </Box>
   )
 }
 

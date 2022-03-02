@@ -13,14 +13,14 @@ export class PaymentController {
   @MessagePattern(SERVICE_EVENTS.CREATE_PAYMENT)
   public async payment(order_id: number): Promise<{ [key: string]: any }> {
     const result = await this.paymentService.payment(order_id);
-    if (result.status) return this.response.success();
-    return this.response.failure(result.message);
+    if (result.status) return this.response.success({ order_id });
+    return this.response.failure({ order_id }, result.message);
   }
 
   @UseFilters(new ExceptionFilter())
   @MessagePattern(SERVICE_EVENTS.REFUND_PAYMENT)
   public async refund(order_id: number): Promise<{ [key: string]: any }> {
     await this.paymentService.refund(order_id);
-    return this.response.success();
+    return this.response.success({ order_id });
   }
 }

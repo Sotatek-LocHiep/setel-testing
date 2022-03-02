@@ -35,8 +35,7 @@ export class OrderStateController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
-    const check = await this.orderService.checkOwnership(id, user_id);
-    if (!check) throw new ForbiddenException('Order is not of you.');
+    await this.orderService.checkOwnership(id, user_id);
     const states = await this.orderStateService.getAll(id);
     return this.response.collection(states, new OrderStateTransformer());
   }
@@ -51,8 +50,7 @@ export class OrderStateController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
-    const check = await this.orderService.checkOwnership(id, user_id);
-    if (!check) throw new ForbiddenException('Order is not of you.');
+    await this.orderService.checkOwnership(id, user_id);
     const state = await this.orderStateService.getLastOrderState(id);
     return this.response.item(state, new OrderStateTransformer());
   }
@@ -67,9 +65,8 @@ export class OrderStateController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
-    const check = await this.orderService.checkOwnership(id, user_id);
-    if (!check) throw new ForbiddenException('Order is not of you.');
-    const state = await this.orderService.confirmAndPay(id);
+    await this.orderService.checkOwnership(id, user_id);
+    const state = await this.orderStateService.create(await this.orderStateService.buildEntityConfirmedStateValid(id));
     return this.response.item(state, new OrderStateTransformer());
   }
 
@@ -83,8 +80,7 @@ export class OrderStateController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
-    const check = await this.orderService.checkOwnership(id, user_id);
-    if (!check) throw new ForbiddenException('Order is not of you.');
+    await this.orderService.checkOwnership(id, user_id);
     const state = await this.orderStateService.create(await this.orderStateService.buildEntityCanceledStateValid(id));
     return this.response.item(state, new OrderStateTransformer());
   }

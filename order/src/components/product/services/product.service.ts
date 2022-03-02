@@ -41,28 +41,40 @@ export class ProductService extends BaseService {
     return productsBuilt;
   }
 
-  async getEntityForUpdate(order_id: number) {
-    const products = await this.repository
-      .createQueryBuilder('product')
-      .innerJoinAndSelect('product.order_items', 'order_items')
-      .where('order_items.order_id = :order_id', { order_id })
-      .getMany();
-    return products.map((product) => this.minusAmountProductEntity(product));
-  }
-
-  private minusAmountProductEntity(entity: Product): Product {
-    entity.amount -= entity.order_items[0].amount;
-    if (entity.amount < 0) throw new ConflictException('Amount product not enough.');
-    return entity;
-  }
-  async checkAmountTransaction(order_id: number, entityManager: EntityManager) {
+  async checkRemainingInTransaction(order_id: number, entityManager: EntityManager) {
     const products = await entityManager
       .createQueryBuilder('products', 'products')
       .innerJoinAndSelect('products.order_items', 'order_items')
       .where('order_items.order_id = :order_id', { order_id })
       .getMany();
     products.forEach((product: Product) => {
-      if (product.amount < 0) throw new ConflictException(`Amount ${product.name} product not enough.`);
+      if (product.amount < 0) return false;
     });
+    return true;
+  }
+
+  async minusAmountInTransaction(order_id: number, entityManager: EntityManager) {
+    return entityManager.query(
+      `
+          UPDATE \`products\`
+          INNER JOIN \`order_items\`
+          ON \`products\`.\`id\` = \`order_items\`.\`product_id\`
+          SET \`products\`.\`amount\` = \`products\`.\`amount\` - \`order_items\`.\`amount\`, \`products\`.\`updated_at\` = CURRENT_TIMESTAMP 
+          WHERE \`order_items\`.\`order_id\` = ?
+        `,
+      [order_id],
+    );
+  }
+  async refundAmountInTransaction(order_id: number, entityManager: EntityManager) {
+    return entityManager.query(
+      `
+            UPDATE \`products\`
+            INNER JOIN \`order_items\`
+            ON \`products\`.\`id\` = \`order_items\`.\`product_id\`
+            SET \`products\`.\`amount\` = \`products\`.\`amount\` + \`order_items\`.\`amount\`, \`products\`.\`updated_at\` = CURRENT_TIMESTAMP 
+            WHERE \`order_items\`.\`order_id\` = ?
+          `,
+      [order_id],
+    );
   }
 }

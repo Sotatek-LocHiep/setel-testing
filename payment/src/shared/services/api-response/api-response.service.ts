@@ -56,12 +56,12 @@ export class ApiResponseService {
     return { data };
   }
 
-  success(): { data: { success: boolean } } {
-    return { data: { success: true } };
+  success(data: { [key: string]: any }): { data: { success: boolean } } {
+    return { data: { ...data, success: true } };
   }
 
-  failure(message = 'Failure'): { data: { success: boolean; message: string } } {
-    return { data: { success: false, message } };
+  failure(data: { [key: string]: any }, message = 'Failure'): { data: { success: boolean; message: string } } {
+    return { data: { ...data, success: false, message } };
   }
 
   /**
