@@ -1,36 +1,22 @@
-import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  Req,
-  UseGuards,
-  ParseIntPipe,
-  Param,
-  ForbiddenException,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiNotFoundResponse,
   ApiConflictResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
   ApiResponse,
+  ApiServiceUnavailableResponse,
   ApiTags,
   ApiUnauthorizedResponse,
-  ApiForbiddenResponse,
-  ApiServiceUnavailableResponse,
 } from '@nestjs/swagger';
-import { OrderService } from '../services/order.service';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { CreateOrderParams } from './order.dto';
-import { OrderTransformer } from '../transformers/order.transformer';
-import { RequestAuthenticated } from '../../auth/interfaces/request-authenticated-interface';
+import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
 import { FindManyQueryParams } from '../../../shared/validators/find-many-query-params.validator';
-import { IPaginationOptions } from '../../../shared/services/pagination';
-import { getCustomRepository } from 'typeorm';
-import { OrderRepository } from '../repositories/order.repository';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RequestAuthenticated } from '../../auth/interfaces/request-authenticated-interface';
+import { OrderService } from '../services/order.service';
+import { OrderTransformer } from '../transformers/order.transformer';
+import { CreateOrderParams } from './order.dto';
 
 @ApiTags('Order')
 @ApiBearerAuth()
@@ -48,26 +34,8 @@ export class OrderController {
     @Query() query: FindManyQueryParams,
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
-    const params: IPaginationOptions = {
-      limit: query.per_page ? query.per_page : 10,
-      page: query.page ? query.page : 1,
-    };
-    let query_builder = getCustomRepository(OrderRepository)
-      .createQueryBuilder('orders')
-      .where('orders.user_id = :user_id', { user_id });
-    if (query.search && query.search !== '') {
-      query_builder = query_builder.andWhere('code LIKE :keyword', {
-        keyword: `%${query.search}%`,
-      });
-    }
-    query_builder = query_builder
-      .innerJoinAndSelect('orders.user', 'user')
-      .leftJoinAndSelect('orders.order_states', 'order_states')
-      .leftJoinAndSelect('orders.order_items', 'order_items')
-      .innerJoinAndSelect('order_items.product', 'product')
-      .orderBy('orders.id', 'DESC');
-    const data = await this.orderService.paginate(query_builder, params);
-    return this.response.paginate(data, new OrderTransformer(['user', 'order_states', 'order_items']));
+    const orders = await this.orderService.showPagination({ user_id, query });
+    return this.response.paginate(orders, new OrderTransformer(['user', 'order_states', 'order_items']));
   }
 
   @Get(':id')
@@ -80,8 +48,8 @@ export class OrderController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
+    await this.orderService.checkOwnership(id, user_id);
     const order = await this.orderService.show(id);
-    if (order.user_id !== user_id) throw new ForbiddenException('Order is not of you.');
     return this.response.item(order, new OrderTransformer(['user', 'order_states', 'order_items']));
   }
 

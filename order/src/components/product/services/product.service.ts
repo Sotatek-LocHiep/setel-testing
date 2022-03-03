@@ -1,10 +1,12 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { pick, uniqBy } from 'lodash';
+import { OrderProduct } from 'src/components/order/controllers/order.dto';
+import { IPaginationOptions } from 'src/shared/services/pagination';
+import { FindManyQueryParams } from 'src/shared/validators/find-many-query-params.validator';
+import { Connection, EntityManager, Repository } from 'typeorm';
 import { BaseService } from '../../../shared/services/base.service';
-import { Repository, Connection, EntityManager } from 'typeorm';
 import { Product } from '../entities/product.entity';
 import { ProductRepository } from '../repositories/product.repository';
-import { OrderProduct } from 'src/components/order/controllers/order.dto';
-import { pick, uniqBy } from 'lodash';
 
 export interface OrderProductBuilder {
   product_id: number;
@@ -21,6 +23,23 @@ export class ProductService extends BaseService {
   constructor(private connection: Connection) {
     super();
     this.repository = connection.getCustomRepository(ProductRepository);
+  }
+  async showPagination(query: FindManyQueryParams) {
+    const params: IPaginationOptions = {
+      limit: query.per_page ? query.per_page : 10,
+      page: query.page ? query.page : 1,
+    };
+    let query_builder = this.repository.createQueryBuilder('products');
+    if (query.search && query.search !== '') {
+      query_builder = query_builder
+        .andWhere('name LIKE :keyword', {
+          keyword: `%${query.search}%`,
+        })
+        .orWhere('code LIKE :keyword', {
+          keyword: `%${query.search}%`,
+        });
+    }
+    return this.paginate(query_builder, params);
   }
 
   /**

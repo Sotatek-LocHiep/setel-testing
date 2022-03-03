@@ -1,5 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { omit } from 'lodash';
+import { IPaginationOptions } from 'src/shared/services/pagination';
+import { FindManyQueryParams } from 'src/shared/validators/find-many-query-params.validator';
 import { Connection, EntityManager, Repository } from 'typeorm';
 import { BaseService } from '../../../shared/services/base.service';
 import { ProductService } from '../../product/services/product.service';
@@ -27,7 +29,27 @@ export class OrderService extends BaseService {
     super();
     this.repository = connection.getCustomRepository(OrderRepository);
   }
-  async show(id) {
+
+  async showPagination({ user_id, query }: { user_id: number; query: FindManyQueryParams }) {
+    const params: IPaginationOptions = {
+      limit: query.per_page ? query.per_page : 10,
+      page: query.page ? query.page : 1,
+    };
+    let query_builder = this.repository.createQueryBuilder('orders').where('orders.user_id = :user_id', { user_id });
+    if (query.search && query.search !== '') {
+      query_builder = query_builder.andWhere('code LIKE :keyword', {
+        keyword: `%${query.search}%`,
+      });
+    }
+    query_builder = query_builder
+      .innerJoinAndSelect('orders.user', 'user')
+      .leftJoinAndSelect('orders.order_states', 'order_states')
+      .leftJoinAndSelect('orders.order_items', 'order_items')
+      .innerJoinAndSelect('order_items.product', 'product')
+      .orderBy('orders.id', 'DESC');
+    return this.paginate(query_builder, params);
+  }
+  async show(id: number) {
     return this.repository
       .createQueryBuilder('order')
       .where('order.id = :id', { id })
