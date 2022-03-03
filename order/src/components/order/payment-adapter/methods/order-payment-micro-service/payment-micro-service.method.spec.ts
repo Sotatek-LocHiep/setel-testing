@@ -1,6 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { microServicesProvide } from '../../../../../../shared/services/micro-service/micro-services.provider';
+import { microServicesProvide } from '../../../../../shared/services/micro-service/micro-services.provider';
 import { PaymentMicroServiceMethod } from './payment-micro-service.method';
 describe('PaymentMicroServiceMethod', () => {
   let service: PaymentMicroServiceMethod;

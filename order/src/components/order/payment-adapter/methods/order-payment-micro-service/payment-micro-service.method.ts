@@ -1,8 +1,8 @@
 import { Inject, Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { SERVICES } from '../../../../../../shared/services/micro-service/micro-services.provider';
-import { SERVICE_EVENTS } from '../../../../constants';
+import { SERVICES } from '../../../../../shared/services/micro-service/micro-services.provider';
+import { SERVICE_EVENTS } from '../../../constants';
 import { IPaymentMethod } from '../../interfaces/payment-method.interface';
 
 @Injectable()

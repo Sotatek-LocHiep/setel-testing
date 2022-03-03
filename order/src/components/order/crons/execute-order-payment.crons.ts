@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ProductService } from '../../product/services/product.service';
 import { Connection, EntityManager } from 'typeorm';
-import { PaymentAdapter } from '../adapters/payment/payment.adapter';
-import { OrderStateFactory } from '../factories/order-state.factory';
-import { OrderService } from '../services/order.service';
-import { OrderStateService } from '../services/state/order-state.service';
+import { ProductService } from '../../product/services/product.service';
 import { OrderState } from '../entities/order-state.entity';
+import { OrderStateFactory } from '../factories/order-state.factory';
+import { PaymentAdapter } from '../payment-adapter/payment.adapter';
+import { OrderService } from '../services/order.service';
 
 @Injectable()
 export class ExecuteOrderPaymentCron {
@@ -15,7 +14,6 @@ export class ExecuteOrderPaymentCron {
     private readonly orderService: OrderService,
     private readonly paymentAdapter: PaymentAdapter,
     private readonly orderStateFactory: OrderStateFactory,
-    private readonly orderStateService: OrderStateService,
     private readonly productService: ProductService,
   ) {}
 
