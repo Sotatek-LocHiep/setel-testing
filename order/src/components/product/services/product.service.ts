@@ -42,11 +42,6 @@ export class ProductService extends BaseService {
     return this.paginate(query_builder, params);
   }
 
-  /**
-   * To build params to store to order-item
-   * @param orderProducts: OrderProduct
-   * @returns products Built to store to order-item, products entity loaded minus amount to buy
-   */
   async buildOrderItems(orderProducts: OrderProduct[]): Promise<OrderProductBuilder[]> {
     orderProducts = uniqBy(orderProducts, 'product_id');
     const productsBuilt = [];
