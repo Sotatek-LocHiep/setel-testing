@@ -4,7 +4,7 @@
 + Command to run:
 ```
 # Command to run
-- sh start.sh
+  sh start.sh
 ```
 + web app: [http://localhost:3000](http://localhost:3000) 
 + order service: [http://localhost:3001](http://localhost:3001)
@@ -15,7 +15,7 @@
 ## To stop: 
 ```
 # Command to run
-- sh stop.sh
+  sh stop.sh
 ```
 
 
@@ -23,14 +23,14 @@
 + If mysql DB don't have any table at first time run project, you must exec to order-service container to migrate database:
 ```
 # exec to order-service-container
-- docker exec -it <order-service-container-id> sh
+  docker exec -it <order-service-container-id> sh
 # run migrate database
-- yarn db:migrate
+  yarn db:migrate
 ```
 + If mysql DB don't have any records on products table, you must exec to order-service container to seeding product table:
 ```
 # exec to order-service-container
-- docker exec -it <order-service-container-id> sh
+  docker exec -it <order-service-container-id> sh
 # run seeding to add default records to tables
-- yarn db:seed
+  yarn db:seed
 ```
