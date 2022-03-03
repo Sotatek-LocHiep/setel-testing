@@ -6,6 +6,11 @@
 # Command to run
 - sh start.sh
 ```
++ web app: <a>localhost:3000</a>
++ order service: <a>localhost:3001</a>
++ order service swagger: <a>localhost:3001/docs</a>
++ payment service: <a>localhost:3002</a>
++ MySql: <a>localhost:3003</a>
 
 ## To stop: 
 ```
