@@ -42,13 +42,3 @@
   yarn db:seed
 ```
 
-In other exception i don't know exactly what problem your device has with my code while my devices work properly with my code, docker, docker-compose, i have deployed application on my VPS, you can access it here in case something bad happens:
-web app: http://103.153.68.164:3000
-order service: http://103.153.68.164:3001
-order service swagger:http://103.153.68.164:3001/docs
-payment service: http://103.153.68.164:3002
-MySql: http://103.153.68.164:3003
-MYSQL_ROOT_PASSWORD=root
-MYSQL_DATABASE=order
-MYSQL_USER=root
-MYSQL_PORT=3003
