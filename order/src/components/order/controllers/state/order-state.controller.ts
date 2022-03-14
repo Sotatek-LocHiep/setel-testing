@@ -1,5 +1,4 @@
-import { ApiResponseService } from '../../../../shared/services/api-response/api-response.service';
-import { Controller, Req, UseGuards, Put, Get, Param, ParseIntPipe, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Put, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiConflictResponse,
@@ -8,11 +7,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { OrderService } from '../../services/order.service';
+import { ApiResponseService } from '../../../../shared/services/api-response/api-response.service';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
-import { RequestAuthenticated } from 'src/components/auth/interfaces/request-authenticated-interface';
-import { OrderStateTransformer } from '../../transformers/order-state.transformer';
+import { RequestAuthenticated } from '../../../auth/interfaces/request-authenticated.interface';
+import { OrderService } from '../../services/order.service';
 import { OrderStateService } from '../../services/state/order-state.service';
+import { OrderStateTransformer } from '../../transformers/order-state.transformer';
 
 @ApiTags('Order')
 @ApiBearerAuth()
@@ -66,7 +66,7 @@ export class OrderStateController {
   ): Promise<{ [key: string]: any }> {
     const user_id = request.user.id;
     await this.orderService.checkOwnership(id, user_id);
-    const state = await this.orderStateService.create(await this.orderStateService.buildEntityConfirmedStateValid(id));
+    const state = await this.orderService.executePayment(id);
     return this.response.item(state, new OrderStateTransformer());
   }
 

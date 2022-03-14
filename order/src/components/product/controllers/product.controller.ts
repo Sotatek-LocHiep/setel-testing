@@ -1,10 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { getCustomRepository } from 'typeorm';
 import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
-import { IPaginationOptions } from '../../../shared/services/pagination';
 import { FindManyQueryParams } from '../../../shared/validators/find-many-query-params.validator';
-import { ProductRepository } from '../repositories/product.repository';
 import { ProductService } from '../services/product.service';
 import { ProductTransformer } from '../transformers/product.transformer';
 

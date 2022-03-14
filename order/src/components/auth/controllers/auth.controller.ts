@@ -11,7 +11,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LoginParams, RegisterParams } from './auth.dto';
-import { authenticatedFields } from '../interfaces/request-authenticated-interface';
+import { authenticatedFields } from '../interfaces/request-authenticated.interface';
 
 @ApiTags('Auth')
 @Controller('api/v1/auth')

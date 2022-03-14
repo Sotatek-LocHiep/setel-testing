@@ -1,4 +1,3 @@
-import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ORDER_STATUS } from '../constants';
 import { OrderState } from '../entities/order-state.entity';

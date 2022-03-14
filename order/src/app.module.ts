@@ -7,10 +7,12 @@ import { ComponentsModule } from './components/components.module';
 import validationSchema from '../config/validationSchema';
 import configuration from '../config/configuration';
 import { SharedModule } from './shared/shared.module';
+import { WsModule } from './ws/ws.module';
 
 @Module({
   imports: [
     SharedModule,
+    WsModule,
     ConfigModule.forRoot({
       load: [configuration],
       validationSchema: validationSchema,

@@ -2,7 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { RequestAuthenticated } from '../../auth/interfaces/request-authenticated-interface';
+import { RequestAuthenticated } from '../../auth/interfaces/request-authenticated.interface';
 import { UserService } from '../services/user.service';
 import { UserTransformer } from '../transformers/user.transformer';
 
