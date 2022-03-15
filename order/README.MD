@@ -23,13 +23,13 @@ Information about [NestJS](https://docs.nestjs.com/)
 
 In `/src` include 2 important module is `/components` and `/shared`
 
-`/components`: 
+`/components` module:
 
 + module contain modules developed independently according to the HMVC architecture. 
 + This makes the modules encapsulated in an isolated way, reducing stickiness, so that we can easily replace and modify them without affecting other modules, 
-+ Also packing these modules into /components also beautifies the project structure (personal opinion).
++ Also packing these modules into /components also beautifies the project structure and let everyone know all the modules developed and extended at this module (this is my opinion).
 
-`/shared`: 
+`/shared` module:
 
 + module is Global module contain comom module, providers, service, utility function, ...etc of project.
 
