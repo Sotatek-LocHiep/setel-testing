@@ -17,9 +17,9 @@ Information about [NestJS](https://docs.nestjs.com/)
 
 ## Setup
 
-<a name="directory-structure"></a>
+<a name="folder-structure"></a>
 
-## Directory structure
+## Folder structure
 
 In `/src` include 2 important module is `/components` and `/shared`
 
