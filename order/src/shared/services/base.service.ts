@@ -102,7 +102,9 @@ export class BaseService {
    * @param data
    */
   async createMany(data: { [key: string]: any }[]): Promise<any> {
-    const items = await this.repository.createQueryBuilder().insert().into(this.entity).values(data).execute();
+    const manager = getManager();
+    const items = await this.repository.create(data);
+    await manager.save(this.entity, items);
     return items;
   }
 

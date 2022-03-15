@@ -13,6 +13,7 @@ import { Divider, Box } from '@chakra-ui/react'
 import { WebSocketService } from 'shared/services/ws/ws.service'
 import { WS_EVENTS } from 'shared/services/ws/ws.event'
 import { useToast, Link } from '@chakra-ui/react'
+import { OrderStateInterface } from 'features/home/order/order-interface'
 
 const toastDefaultOption: any = {
   duration: 2000,
@@ -20,10 +21,8 @@ const toastDefaultOption: any = {
   position: 'top-right',
 }
 type DeliveryWS = {
-  id: number
-  order_id: number
   code: string
-}
+} & OrderStateInterface
 
 export default function ProtectedNavigator() {
   const history = useHistory()
@@ -34,7 +33,7 @@ export default function ProtectedNavigator() {
     if (isEmpty(session)) history.push(paths.LOGIN)
     else dispatch(getProfileAction())
     WebSocketService.init(session as string)
-    WebSocketService.socketClient.on(
+    WebSocketService.socketClient?.on(
       WS_EVENTS.DELIVERY_ORDER,
       (data: DeliveryWS) =>
         toast({
@@ -51,6 +50,9 @@ export default function ProtectedNavigator() {
           status: 'info',
         })
     )
+    return () => {
+      WebSocketService.socketClient?.disconnect()
+    }
   }, [history, dispatch])
 
   return (

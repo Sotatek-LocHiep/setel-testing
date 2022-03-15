@@ -26,14 +26,17 @@ export class DeliveryOrderCron {
   @Cron(CronExpression.EVERY_30_SECONDS)
   async execute() {
     const orders = await this.orderService.getAllWithConfirmState();
-    const states = orders.map((order) => this.orderStateFactory.buildEntityDeliveredState(order.id));
-    await this.orderStateService.createMany(states);
-    // notify delivery state
-    orders.forEach((order) =>
-      this.ioServer.to(`${order.user_id}`).emit(WS_EVENTS.DELIVERY_ORDER, {
-        ...pick(order, ['code']),
-        ...this.orderStateFactory.buildEntityDeliveredState(order.id),
-      }),
-    );
+    if (orders.length > 0) {
+      let states = orders.map((order) => this.orderStateFactory.buildEntityDeliveredState(order.id));
+      states = await this.orderStateService.createMany(states);
+      // notify order
+      states.forEach((state) => {
+        const order = orders.find((order) => order.id === state.order_id);
+        if (order) {
+          const data = { ...pick(order, ['code']), ...state };
+          this.ioServer.to(`${order.user_id}`).emit(WS_EVENTS.DELIVERY_ORDER, data);
+        }
+      });
+    }
   }
 }

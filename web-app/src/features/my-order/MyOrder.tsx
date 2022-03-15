@@ -1,6 +1,7 @@
 import {
   ButtonProps,
   Center,
+  Flex,
   Table,
   TableCaption,
   Tbody,
@@ -11,7 +12,6 @@ import {
   Thead,
   Tr,
   useToast,
-  Flex,
 } from '@chakra-ui/react'
 import {
   Container,
@@ -21,11 +21,13 @@ import {
   Previous,
   usePaginator,
 } from 'chakra-paginator'
-import { ORDER_STATUS } from 'features/home/order/constants'
 import { OrderStateInterface } from 'features/home/order/order-interface'
+import { omit } from 'lodash'
 import React from 'react'
 import Spinner from 'shared/components/Spinner'
 import { useSpinner } from 'shared/components/Spinner/hooks/useSpinner'
+import { WS_EVENTS } from 'shared/services/ws/ws.event'
+import { WebSocketService } from 'shared/services/ws/ws.service'
 import { formatDateToCleanString } from 'shared/utils/format-date'
 import OrderActionItem from './components/OrderActionItem'
 import OrderMoneyItem from './components/OrderMoneyItem'
@@ -69,6 +71,9 @@ const toastDefaultOption: any = {
   isClosable: true,
   position: 'top-right',
 }
+type DeliveryWS = {
+  code: string
+} & OrderStateInterface
 
 export default function MyOrder() {
   const toast = useToast()
@@ -96,6 +101,24 @@ export default function MyOrder() {
   React.useEffect(() => {
     getOrders(currentPage)
   }, [currentPage, pageSize, offset])
+
+  React.useEffect(() => {
+    if (WebSocketService.socketClient) {
+      WebSocketService.socketClient?.on(
+        WS_EVENTS.DELIVERY_ORDER,
+        (data: DeliveryWS) => {
+          setOrders((prevOrders: MyOrderInterface[]) => {
+            const order = prevOrders.find(order => order.id === data.order_id)
+            if (order) {
+              order.order_states.push(omit(data, ['code']))
+              return [...prevOrders]
+            }
+            return prevOrders
+          })
+        }
+      )
+    }
+  }, [WebSocketService.socketClient])
 
   const getOrders = async (page: number) => {
     activeSpinner()

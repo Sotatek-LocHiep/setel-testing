@@ -13,6 +13,8 @@ import { ORDER_STATUS } from 'features/home/order/constants'
 import { OrderStateInterface } from 'features/home/order/order-interface'
 import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
+import { WS_EVENTS } from 'shared/services/ws/ws.event'
+import { WebSocketService } from 'shared/services/ws/ws.service'
 import { MyOrderInterface } from '../my-order-interface'
 import { requestGetOrder } from '../MyOrderApi'
 import { getLastOrderStateStatus } from '../utils/get-last-order-state-status'
@@ -20,12 +22,16 @@ import OrderAction from './components/OrderAction'
 import OrderInformation from './components/OrderInformation'
 import OrderItemTable from './components/OrderItemTable'
 import OrderStateTimeline from './components/OrderStateTimeline'
+import { omit } from 'lodash'
 
 const toastDefaultOption: any = {
   duration: 2000,
   isClosable: true,
   position: 'top-right',
 }
+type DeliveryWS = {
+  code: string
+} & OrderStateInterface
 
 export default function MyOrderDetail() {
   const { id } = useParams<{ id: string }>()
@@ -37,6 +43,22 @@ export default function MyOrderDetail() {
       getOrder(Number(id))
     }
   }, [id])
+  React.useEffect(() => {
+    if (WebSocketService.socketClient) {
+      WebSocketService.socketClient?.on(
+        WS_EVENTS.DELIVERY_ORDER,
+        (data: DeliveryWS) => {
+          setOrder((prevOrder: MyOrderInterface | null) => {
+            if (prevOrder?.id === data.order_id) {
+              prevOrder.order_states.push(omit(data, ['code']))
+              return { ...prevOrder }
+            }
+            return prevOrder
+          })
+        }
+      )
+    }
+  }, [WebSocketService.socketClient])
 
   const getOrder = async (id: number) => {
     try {

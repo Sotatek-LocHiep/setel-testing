@@ -23,8 +23,9 @@ export interface OrderItemInterface {
 
 export interface OrderStateInterface {
   id: number
+  order_id: number
   status: ORDER_STATUS
-  reject_reason?: string
+  reject_reason?: string | null
   created_at: Date
 }
 
