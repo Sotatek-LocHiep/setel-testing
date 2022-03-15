@@ -65,18 +65,6 @@ DB_PASSWORD=
 DB_LOGGING=true
 ```
 
-Email Configuration
-
-```
-MAIL_MAILER=smtp
-MAIL_HOST="smtp.gmail.com"
-MAIL_PORT=587
-MAIL_USERNAME=
-MAIL_PASSWORD=
-MAIL_ENCRYPTION=true
-MAIL_FROM_ADDRESS=
-MAIL_FROM_NAME=from@example.com
-```
 
 <a name="migration--seed"></a>
 
