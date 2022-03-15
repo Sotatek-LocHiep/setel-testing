@@ -22,11 +22,15 @@ Information about [NestJS](https://docs.nestjs.com/)
 ## Directory structure
 
 In `/src` include 2 important module is `/components` and `/shared`
+
 `/components`: 
+
 + module contain modules developed independently according to the HMVC architecture. 
 + This makes the modules encapsulated in an isolated way, reducing stickiness, so that we can easily replace and modify them without affecting other modules, 
 + Also packing these modules into /components also beautifies the project structure (personal opinion).
+
 `/shared`: 
+
 + module is Global module contain comom module, providers, service, utility function, ...etc of project.
 
 Use the tree command to view the directory structure
