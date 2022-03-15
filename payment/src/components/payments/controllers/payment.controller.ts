@@ -1,11 +1,13 @@
-import { Controller, UseFilters } from '@nestjs/common';
+import { Controller, UseFilters, UseGuards } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { ServiceAuthGuard } from '../../auth/guards/service-auth.guard';
 import { ExceptionFilter } from '../../../shared/filters/exception.filter';
 import { ApiResponseService } from '../../../shared/services/api-response/api-response.service';
 import { SERVICE_EVENTS } from '../constants';
 import { PaymentService } from '../services/payment.service';
 
 @Controller('api/v1/payment')
+@UseGuards(ServiceAuthGuard)
 export class PaymentController {
   constructor(private response: ApiResponseService, private paymentService: PaymentService) {}
 
