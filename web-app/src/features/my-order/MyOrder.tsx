@@ -36,6 +36,7 @@ import { MyOrderInterface } from './my-order-interface'
 import { requestGetOrders } from './MyOrderApi'
 import { getLastOrderStateStatus } from './utils/get-last-order-state-status'
 import { getTotalAmountOrderItems } from './utils/get-total-amount-order-item'
+import { ORDER_STATUS } from 'features/home/order/constants'
 // styles
 const baseStyles: ButtonProps = {
   w: 7,
@@ -145,6 +146,14 @@ export default function MyOrder() {
       if (order) {
         order.order_states.push(state)
         setOrders([...orders])
+        if (state.status === ORDER_STATUS.CANCELLED) {
+          return toast({
+            ...toastDefaultOption,
+            title: 'Confirm order error.',
+            description: `Your order ${orderCode} canceled, reason: ${state?.reject_reason}.`,
+            status: 'error',
+          })
+        }
         return toast({
           ...toastDefaultOption,
           title: 'Confirm order success.',

@@ -1,4 +1,4 @@
-import { chakra } from '@chakra-ui/react'
+import { chakra, Button } from '@chakra-ui/react'
 import { OrderStateInterface } from 'features/home/order/order-interface'
 import React from 'react'
 import { MdOutlineCancel } from 'react-icons/md'
@@ -57,7 +57,18 @@ export default function OrderAction({
         textBodyPopover="Are you sure to cancel this order?"
         onConfirm={onCancelOrder}
       />
-      <ConfirmButton
+      <Button
+        key={'btn-confirm'}
+        colorScheme={'green'}
+        variant="outline"
+        size="sm"
+        rightIcon={<CTiTickOutline />}
+        onClick={onConfirmOrder}
+      >
+        confirm
+      </Button>
+      ,
+      {/* <ConfirmButton
         key={'btn-confirm'}
         textButton="confirm"
         isBtnLoading={isBtnConfirmLoading}
@@ -67,7 +78,7 @@ export default function OrderAction({
         textHeaderPopover="Confirmation"
         textBodyPopover="Are you sure to confirm this order?"
         onConfirm={onConfirmOrder}
-      />
+      /> */}
     </>
   )
 }

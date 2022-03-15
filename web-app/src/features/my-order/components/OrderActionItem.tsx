@@ -87,17 +87,28 @@ export default function OrderActionItem({
           textBodyPopover="Are you sure to cancel this order?"
           onConfirm={onCancelOrder}
         />,
-        <ConfirmButton
+
+        <Button
           key={'btn-confirm'}
-          textButton="confirm"
-          isBtnLoading={isBtnConfirmLoading}
-          isBtnDisabled={isBtnCancelLoading}
-          colorScheme="green"
-          iconButton={<CTiTickOutline />}
-          textHeaderPopover="Confirmation"
-          textBodyPopover="Are you sure to confirm this order?"
-          onConfirm={onConfirmOrder}
-        />,
+          colorScheme={'green'}
+          variant="outline"
+          size="sm"
+          rightIcon={<CTiTickOutline />}
+          onClick={onConfirmOrder}
+        >
+          confirm
+        </Button>,
+        // <ConfirmButton
+        //   key={'btn-confirm'}
+        //   textButton="confirm"
+        //   isBtnLoading={isBtnConfirmLoading}
+        //   isBtnDisabled={isBtnCancelLoading}
+        //   colorScheme="green"
+        //   iconButton={<CTiTickOutline />}
+        //   textHeaderPopover="Confirmation"
+        //   textBodyPopover="Are you sure to confirm this order?"
+        //   onConfirm={onConfirmOrder}
+        // />,
         ...buttons,
       ]
     }

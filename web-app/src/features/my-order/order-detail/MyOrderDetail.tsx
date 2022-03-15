@@ -73,6 +73,14 @@ export default function MyOrderDetail() {
     if (order?.order_states && state) {
       order.order_states.push(state)
       setOrder({ ...order })
+      if (state.status === ORDER_STATUS.CANCELLED) {
+        return toast({
+          ...toastDefaultOption,
+          title: 'Confirm order error.',
+          description: `Your order ${order.code} canceled, reason: ${state?.reject_reason}.`,
+          status: 'error',
+        })
+      }
       return toast({
         ...toastDefaultOption,
         title: 'Confirm order success.',
